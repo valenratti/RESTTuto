@@ -11,6 +11,8 @@ import javax.persistence.Id;
 class Employee {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+
+    private String name;
     private String firstName;
     private String lastName;
     private String role;
@@ -25,7 +27,9 @@ class Employee {
     }
 
     public String getName() {
-        return this.firstName + " " + this.lastName;
+        if(name == null)
+            return this.firstName + " " + this.lastName;
+        else return name;
     }
 
     public void setName(String name) {
