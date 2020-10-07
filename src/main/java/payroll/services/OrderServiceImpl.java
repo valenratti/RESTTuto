@@ -1,4 +1,4 @@
-package payroll;
+package payroll.services;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -8,6 +8,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import payroll.config.OrderModelAssembler;
+import payroll.config.OrderNotFoundException;
+import payroll.domain.Status;
+import payroll.controller.OrderController;
+import payroll.domain.Order;
+import payroll.repositories.OrderRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderModelAssembler assembler;

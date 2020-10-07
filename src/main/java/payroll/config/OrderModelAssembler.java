@@ -1,10 +1,13 @@
-package payroll;
+package payroll.config;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
+import payroll.controller.OrderController;
+import payroll.domain.Order;
+import payroll.domain.Status;
 
 @Component
 public class OrderModelAssembler implements RepresentationModelAssembler<Order, EntityModel<Order>> {

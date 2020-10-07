@@ -1,14 +1,15 @@
-package payroll;
+package payroll.domain;
 
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-class Employee {
+public class Employee {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
@@ -16,6 +17,9 @@ class Employee {
     private String firstName;
     private String lastName;
     private String role;
+
+    @OneToMany()
+    private Set<Car> ownedCars;
 
     public Employee() {}
 
@@ -54,6 +58,10 @@ class Employee {
         return this.role;
     }
 
+    public Set<Car> getOwnedCars(){
+        return this.ownedCars;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -68,6 +76,19 @@ class Employee {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void addCar(Car car){
+        car.setOwner(this);
+        this.ownedCars.add(car);
+    }
+
+    public void removeCar(Car car){
+        this.ownedCars.remove(car);
+    }
+
+    public boolean hasCar(Car car){
+        return ownedCars.contains(car);
     }
 
     @Override

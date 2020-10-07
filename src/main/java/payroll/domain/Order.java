@@ -1,4 +1,4 @@
-package payroll;
+package payroll.domain;
 
 
 import java.util.Objects;

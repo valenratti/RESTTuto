@@ -1,17 +1,16 @@
-package payroll;
+package payroll.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import payroll.domain.Car;
+import payroll.services.CarService;
+import payroll.services.EmployeeService;
+import payroll.domain.Employee;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RestController
@@ -20,10 +19,13 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
+    @Autowired
+    CarService carService;
+
     // Aggregate root
 
     @GetMapping("/employees")
-    CollectionModel<EntityModel<Employee>> all() {
+    public CollectionModel<EntityModel<Employee>> all() {
         return employeeService.getEmployees();
     }
 
@@ -42,7 +44,7 @@ public class EmployeeController {
 
 
     @GetMapping("/employees/{id}")
-    EntityModel<Employee> one(@PathVariable Long id) {
+    public EntityModel<Employee> one(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -50,6 +52,16 @@ public class EmployeeController {
     @PutMapping("/employees/{id}")
     ResponseEntity<?> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
         return employeeService.updateEmployee(newEmployee, id);
+    }
+
+    @PutMapping("/employees/{id}/cars")
+    ResponseEntity<?> addCar(@RequestBody Car car, @PathVariable Long id){
+        return carService.addCarToEmployee(employeeService.getEmployeeById(id).getContent(),car);
+    }
+
+    @DeleteMapping("/employees/{id}/cars")
+    ResponseEntity<?> removeCar(@RequestBody Car car, @PathVariable Long id){
+        return carService.removeCarFromEmployee(employeeService.getEmployeeById(id).getContent(),id);
     }
 
     @DeleteMapping("/employees/{id}")

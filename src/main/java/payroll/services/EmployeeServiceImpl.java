@@ -1,10 +1,16 @@
-package payroll;
+package payroll.services;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import payroll.config.EmployeeModelAssembler;
+import payroll.config.EmployeeNotFoundException;
+import payroll.controller.EmployeeController;
+import payroll.domain.Car;
+import payroll.domain.Employee;
+import payroll.repositories.EmployeeRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +32,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public ResponseEntity<?> deleteEmployee(Long id) {
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public boolean containsCar(Employee employee, Car car) {
+        return employee.hasCar(car);
     }
 
     @Override
