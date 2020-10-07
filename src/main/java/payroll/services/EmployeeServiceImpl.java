@@ -1,5 +1,7 @@
 package payroll.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -15,14 +17,13 @@ import payroll.repositories.EmployeeRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository repository;
     private final EmployeeModelAssembler assembler;
 
+    @Autowired
     EmployeeServiceImpl(EmployeeRepository repository, EmployeeModelAssembler assembler){
         this.repository = repository;
         this.assembler = assembler;
@@ -45,8 +46,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getEmployeesByName(String name) {
+    public List<Employee> getEmployees(String name) {
         return repository.findAllByFirstName(name);
+    }
+
+    @Override
+    public List<Employee> getEmployeesByPages(int page, int size) {
+        return repository.findAll(PageRequest.of(page,size)).getContent();
     }
 
     @Override

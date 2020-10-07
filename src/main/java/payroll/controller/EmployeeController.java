@@ -35,10 +35,15 @@ public class EmployeeController {
         return employeeService.getEmployees();
     }
 
+    @GetMapping("/employees/{page}/{pagesize}")
+    public List<Employee> allByPages(@PathVariable int page, @PathVariable int pagesize){
+        return employeeService.getEmployeesByPages(page,pagesize);
+    }
+
     //By name
     @GetMapping("/employees/name/{name}")
     List<Employee> byName(@PathVariable String name){
-        return employeeService.getEmployeesByName(name);
+        return employeeService.getEmployees(name);
     }
 
     @PostMapping("/employees")

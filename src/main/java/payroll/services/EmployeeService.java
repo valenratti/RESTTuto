@@ -11,7 +11,8 @@ import java.util.List;
 public interface EmployeeService {
 
     List<Employee> getEmployees(); // /employees
-    List<Employee> getEmployeesByName(String name);
+    List<Employee> getEmployees(String name);
+    List<Employee> getEmployeesByPages(int page, int size);
     Employee createEmployee(Employee newEmployee);
     Employee getEmployeeById(Long id);
     Employee updateEmployee(Employee newEmployee, Long id);
