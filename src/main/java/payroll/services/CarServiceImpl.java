@@ -16,45 +16,34 @@ import java.util.Optional;
 @Service
 public class CarServiceImpl implements CarService {
 
-    @Autowired
-    EmployeeService employeeService;
-
-    @Autowired
-    CarService carService;
+    final EmployeeService employeeService;
 
     private final CarRepository repository;
     private final EmployeeModelAssembler assembler;
 
-
-    CarServiceImpl(CarRepository repository, EmployeeModelAssembler assembler) {
+    @Autowired
+    CarServiceImpl(CarRepository repository, EmployeeModelAssembler assembler, EmployeeService employeeService) {
         this.repository = repository;
         this.assembler = assembler;
+        this.employeeService = employeeService;
     }
 
     @Override
-    public ResponseEntity<EntityModel<Employee>> addCarToEmployee(Employee employee, Car car) {
+    public Employee addCarToEmployee(Employee employee, Car car) {
         employee.addCar(car);
         repository.save(car);
-        EntityModel<Employee> entityModel = assembler.toModel(employee);
-
-        return ResponseEntity //
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
-                .body(entityModel);
+        return employee;
     }
 
     @Override
-    public ResponseEntity<EntityModel<Employee>> removeCarFromEmployee(Employee employee, Long id) {
+    public Employee removeCarFromEmployee(Employee employee, Long id) {
         Optional<Car> toDelete = repository.findByCarID(id);
 
         if (toDelete.isPresent()) {
             Car car = toDelete.get();
             employee.removeCar(car);
             repository.deleteById(id);
-
-            EntityModel<Employee> entityModel = assembler.toModel(employee);
-            return ResponseEntity //
-                    .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
-                    .body(entityModel);
+            return employee;
         } else throw new CarNotFoundException(id);
     }
 

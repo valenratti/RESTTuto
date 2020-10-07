@@ -1,5 +1,6 @@
 package payroll.domain;
 
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

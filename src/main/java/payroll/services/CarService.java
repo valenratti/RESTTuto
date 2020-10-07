@@ -7,7 +7,7 @@ import payroll.domain.Employee;
 
 public interface CarService {
 
-    public abstract ResponseEntity<EntityModel<Employee>> addCarToEmployee(Employee employee, Car car);
-    public abstract ResponseEntity<EntityModel<Employee>> removeCarFromEmployee(Employee employee, Long id);
+    Employee addCarToEmployee(Employee employee, Car car);
+    Employee removeCarFromEmployee(Employee employee, Long id);
 
 }

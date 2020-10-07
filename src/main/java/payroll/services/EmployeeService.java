@@ -6,13 +6,15 @@ import org.springframework.http.ResponseEntity;
 import payroll.domain.Car;
 import payroll.domain.Employee;
 
+import java.util.List;
+
 public interface EmployeeService {
 
-    public abstract CollectionModel<EntityModel<Employee>> getEmployees(); // /employees
-    public abstract CollectionModel<EntityModel<Employee>> getEmployeesByName(String name);
-    public abstract ResponseEntity<?> createEmployee(Employee newEmployee);
-    public abstract EntityModel<Employee> getEmployeeById(Long id);
-    public abstract ResponseEntity<?> updateEmployee(Employee newEmployee, Long id);
-    public abstract ResponseEntity<?> deleteEmployee(Long id);
-    public boolean containsCar(Employee employee, Car car);
+    List<Employee> getEmployees(); // /employees
+    List<Employee> getEmployeesByName(String name);
+    Employee createEmployee(Employee newEmployee);
+    Employee getEmployeeById(Long id);
+    Employee updateEmployee(Employee newEmployee, Long id);
+    void deleteEmployee(Long id);
+    boolean containsCar(Employee employee, Car car);
 }

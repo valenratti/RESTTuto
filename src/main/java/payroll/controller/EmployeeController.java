@@ -10,33 +10,39 @@ import payroll.services.CarService;
 import payroll.services.EmployeeService;
 import payroll.domain.Employee;
 
+import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
 public class EmployeeController {
 
-    @Autowired
-    EmployeeService employeeService;
+    final EmployeeService employeeService;
+
+    final CarService carService;
 
     @Autowired
-    CarService carService;
+    public EmployeeController(EmployeeService employeeService, CarService carService) {
+        this.employeeService = employeeService;
+        this.carService = carService;
+    }
 
     // Aggregate root
 
     @GetMapping("/employees")
-    public CollectionModel<EntityModel<Employee>> all() {
+    public List<Employee> all() {
         return employeeService.getEmployees();
     }
 
     //By name
     @GetMapping("/employees/name/{name}")
-    CollectionModel<EntityModel<Employee>> byName(@PathVariable String name){
+    List<Employee> byName(@PathVariable String name){
         return employeeService.getEmployeesByName(name);
     }
 
-    @PostMapping("/employees") //ESTO VER
-    ResponseEntity<?> newEmployee(@RequestBody Employee newEmployee) {
+    @PostMapping("/employees")
+    Employee newEmployee(@RequestBody Employee newEmployee) {
         return employeeService.createEmployee(newEmployee);
     }
 
@@ -44,28 +50,28 @@ public class EmployeeController {
 
 
     @GetMapping("/employees/{id}")
-    public EntityModel<Employee> one(@PathVariable Long id) {
+    public Employee one(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
 
     @PutMapping("/employees/{id}")
-    ResponseEntity<?> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
+    Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
         return employeeService.updateEmployee(newEmployee, id);
     }
 
     @PutMapping("/employees/{id}/cars")
-    ResponseEntity<?> addCar(@RequestBody Car car, @PathVariable Long id){
-        return carService.addCarToEmployee(employeeService.getEmployeeById(id).getContent(),car);
+    Employee addCar(@RequestBody Car car, @PathVariable Long id){
+        return carService.addCarToEmployee(employeeService.getEmployeeById(id),car);
     }
 
-    @DeleteMapping("/employees/{id}/cars")
-    ResponseEntity<?> removeCar(@RequestBody Car car, @PathVariable Long id){
-        return carService.removeCarFromEmployee(employeeService.getEmployeeById(id).getContent(),id);
+    @DeleteMapping("/employees/{id}/cars/{carid}")
+    Employee removeCar(@RequestBody Car car, @PathVariable Long id, @PathVariable Long carid){
+        return carService.removeCarFromEmployee(employeeService.getEmployeeById(id),carid);
     }
 
     @DeleteMapping("/employees/{id}")
-    ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
-        return employeeService.deleteEmployee(id);
+    void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
     }
 }

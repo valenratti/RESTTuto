@@ -4,8 +4,8 @@ import javax.persistence.*;
 
 @Entity
 public class Car {
-    private @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) Long carID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) private Long carID;
 
     private String model;
     private String color;
@@ -33,6 +33,5 @@ public class Car {
     public String getYear() {
         return year;
     }
-
 
 }
