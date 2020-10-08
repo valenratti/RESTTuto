@@ -1,16 +1,16 @@
 package payroll.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import payroll.domain.Car;
+import payroll.dto.EmployeeDto;
 import payroll.services.CarService;
 import payroll.services.EmployeeService;
 import payroll.domain.Employee;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -22,10 +22,13 @@ public class EmployeeController {
 
     final CarService carService;
 
+    final ModelMapper modelMapper;
+
     @Autowired
-    public EmployeeController(EmployeeService employeeService, CarService carService) {
+    public EmployeeController(EmployeeService employeeService, CarService carService, ModelMapper modelMapper) {
         this.employeeService = employeeService;
         this.carService = carService;
+        this.modelMapper = modelMapper;
     }
 
     // Aggregate root
@@ -33,6 +36,11 @@ public class EmployeeController {
     @GetMapping("/employees")
     public List<Employee> all() {
         return employeeService.getEmployees();
+    }
+
+    @GetMapping("/employees/carsQty")
+    public List<EmployeeDto> allCarsQty() {
+        return employeeService.getEmployees().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @GetMapping("/employees/{page}/{pagesize}")
@@ -79,4 +87,16 @@ public class EmployeeController {
     void deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
     }
+
+    private EmployeeDto convertToDto(Employee employee){
+
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setFirstName(employee.getFirstName());
+        employeeDto.setLastName(employee.getLastName());
+        employeeDto.setId(employee.getId());
+        employeeDto.setRole(employee.getRole());
+        employeeDto.setCarsQty((long) employee.getOwnedCars().size());
+        return employeeDto;
+    }
+
 }

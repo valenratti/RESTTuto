@@ -1,5 +1,6 @@
 package payroll;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,5 +23,9 @@ public class PayrollApplication {
                 .build()
                 .apiInfo(new ApiInfoBuilder().version("1.0").title("Server API").description("Documentation Server API v1.0").build());
     }*/
+   @Bean
+   public ModelMapper modelMapper() {
+       return new ModelMapper();
+   }
 
 }
