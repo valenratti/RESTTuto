@@ -9,7 +9,7 @@ public class Car {
 
     private String model;
     private String color;
-    private String year;
+    private int year;
 
     @ManyToOne
     private Employee owner;
@@ -30,7 +30,7 @@ public class Car {
         return color;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
