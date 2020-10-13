@@ -1,15 +1,10 @@
-package payroll.services;
+package payroll.security.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import payroll.config.EmployeeModelAssembler;
 import payroll.config.EmployeeNotFoundException;
-import payroll.controller.EmployeeController;
 import payroll.domain.Car;
 import payroll.domain.Employee;
 import payroll.repositories.EmployeeRepository;

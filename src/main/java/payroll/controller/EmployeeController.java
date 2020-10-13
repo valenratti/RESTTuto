@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import payroll.domain.Car;
 import payroll.dto.EmployeeDto;
 import payroll.services.CarService;
-import payroll.services.EmployeeService;
+import payroll.security.services.EmployeeService;
 import payroll.domain.Employee;
 
 import java.util.List;
@@ -16,6 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
+@RequestMapping("employees")
 public class EmployeeController {
 
     final EmployeeService employeeService;
@@ -33,28 +34,28 @@ public class EmployeeController {
 
     // Aggregate root
 
-    @GetMapping("/employees")
+    @GetMapping("")
     public List<Employee> all() {
         return employeeService.getEmployees();
     }
 
-    @GetMapping("/employees/carsQty")
+    @GetMapping("carsQty")
     public List<EmployeeDto> allCarsQty() {
         return employeeService.getEmployees().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/employees/{page}/{pagesize}")
+    @GetMapping("{page}/{pagesize}")
     public List<Employee> allByPages(@PathVariable int page, @PathVariable int pagesize){
         return employeeService.getEmployeesByPages(page,pagesize);
     }
 
     //By name
-    @GetMapping("/employees/name/{name}")
+    @GetMapping("name/{name}")
     List<Employee> byName(@PathVariable String name){
         return employeeService.getEmployees(name);
     }
 
-    @PostMapping("/employees")
+    @PostMapping("")
     Employee newEmployee(@RequestBody Employee newEmployee) {
         return employeeService.createEmployee(newEmployee);
     }
@@ -62,28 +63,28 @@ public class EmployeeController {
     // Single item
 
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("{id}")
     public Employee one(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
 
-    @PutMapping("/employees/{id}")
+    @PutMapping("{id}")
     Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
         return employeeService.updateEmployee(newEmployee, id);
     }
 
-    @PutMapping("/employees/{id}/cars")
+    @PutMapping("{id}/cars")
     Employee addCar(@RequestBody Car car, @PathVariable Long id){
         return carService.addCarToEmployee(employeeService.getEmployeeById(id),car);
     }
 
-    @DeleteMapping("/employees/{id}/cars/{carid}")
+    @DeleteMapping("{id}/cars/{carid}")
     Employee removeCar(@RequestBody Car car, @PathVariable Long id, @PathVariable Long carid){
         return carService.removeCarFromEmployee(employeeService.getEmployeeById(id),carid);
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     void deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
     }
